@@ -3,14 +3,15 @@ version: '3'
 services: 
     app:
         build: 
-          context: node
+          context: ./node
         container_name: app
-        entrypoint: dockerize -wait tcp://mysql:3306 -timeout 20s docker-entrypoint.sh
+        # entrypoint: dockerize -wait tcp://mysql:3306 -timeout 20s docker-entrypoint.sh
         command: node index.js
         networks: 
           - challenge-net
         volumes: 
           - ./node:/usr/src/app
+          - /usr/src/app/node_modules
         tty: true
         ports: 
           - "3000:3000"
@@ -40,6 +41,8 @@ services:
             - challenge-net
         ports: 
             - '8080:80'
+        depends_on: 
+          - app
 
 networks: 
     challenge-net: 
